@@ -1,26 +1,30 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <h1>Covid 19 World Statistics</h1>
+    <landing-stats></landing-stats>
+    <covid-map></covid-map>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import CovidMap from './components/CovidMap.vue'
+import LandingStats from './components/LandingStats.vue'
 export default {
+  data () {
+    return {
+    }
+  },
+  created () {
+  },
   name: 'App',
   components: {
-    HelloWorld
-  }
+    CovidMap,
+    LandingStats
+  },  
+
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+
 </style>
