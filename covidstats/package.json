@@ -11,10 +11,12 @@
         "bootstrap": "^5.2.3",
         "laravel-vite-plugin": "^0.7.2",
         "sass": "^1.56.1",
-        "vite": "^4.0.0",
-        "vue": "^3.2.47"
+        "vite": "^4.0.0"
     },
     "dependencies": {
+        "bootstrap-vue": "^2.23.1",
+        "bootstrap-vue-3": "^0.5.1",
+        "vue": "^3.2.47",
         "vue-cli": "^2.9.6",
         "world-map-vue": "^0.2.1"
     }

@@ -48,10 +48,13 @@ class CountryController extends Controller
             'TotalRecovered'=>$temp['TotalRecovered'],
         ]);
 
-        return response() -> json(['message' => 'Country added successfully!'], 200);
+        return response() -> json(['message' => 'Databases updated successfully!'], 200);
     }
 
-    public function get_data(){
+    public function get_global_data(){
         return GlobalData::all();
+    }
+    public function get_country_data(){
+        return Country::all();
     }
 }

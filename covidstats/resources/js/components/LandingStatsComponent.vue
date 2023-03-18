@@ -24,7 +24,7 @@ import axios from 'axios';
   },
         methods:{
             async getData(){
-                axios.get('get_data').then((res) => {
+                axios.get('get_global_data').then((res) => {
                     this.globalData = res.data[0];
                     this.totCon = res.data[0].TotalConfirmed.toLocaleString();
                     this.totRec = res.data[0].TotalRecovered.toLocaleString();
