@@ -1,6 +1,9 @@
 <template>
     <div>
-        <b-table striped bordered :items="countryData" :fields="tblFields"></b-table>
+        <b-table striped bordered
+        :items="countryData" :fields="tblFields"
+        :sort-by="TotalConfirmed"
+        ></b-table>
     </div>
 </template>
 

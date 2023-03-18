@@ -9,6 +9,7 @@
     <body>
         @vite('resources/js/app.js')
         <div id="app">
+            <example></example>
             <h1>Covid Statistical Data</h1>
             <landing-stats></landing-stats>
             <h1>Map</h1>
