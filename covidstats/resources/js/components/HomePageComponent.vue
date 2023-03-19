@@ -1,33 +1,18 @@
 <template>
-    <div>
-        <b-tabs content-class="mt-3">
-        <b-tab title="World">
-        </b-tab>
-        <b-tab title="Country">
-            <router-link class="nav-link"
-            :to="{ name: home}"></router-link>
-        </b-tab>
-  </b-tabs>
-    </div>
+  <div>
+    <b-nav tabs>
+    <b-nav-item to="/">Home</b-nav-item>
+    <b-nav-item to="/country-list">Wordl</b-nav-item>
+
+  </b-nav>
+  <router-view></router-view>
+  </div>
 </template>
 
 <script>
-import LandingStats from '../../../../covid19statistics/src/components/LandingStats.vue';
 export default {
-  components: { LandingStats },
-  watch: {
 
-  },
-  props:{
-
-  },
-  methods:{
-  },
-  mounted(){
-
-  }
-
-};
+}
 </script>
 
 <style>

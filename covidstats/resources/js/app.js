@@ -1,7 +1,7 @@
 import './bootstrap';
 import { createApp } from 'vue';
 import {BootstrapVue, IconsPlugin} from "bootstrap-vue";
-// import router from './router';
+import router from './router';
 
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
@@ -12,9 +12,10 @@ import '../sass/app.scss'
 const app = createApp({});
 // const app = createApp({
 //     router,
-//     e1: '#app',
-//     render: h=>h(App)
+//     el: '#app',
+//     render: h=>h(HomePageComponent)
 // });
+app.use(router)
 app.use(BootstrapVue);
 app.use(IconsPlugin)
 

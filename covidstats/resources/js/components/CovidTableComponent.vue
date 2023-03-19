@@ -1,9 +1,11 @@
 <template>
     <div>
+        <b-form-input v-model="countryName"
+        placeholder="Search by country name"></b-form-input>
         <b-table striped bordered responsive
         id="covidTable"
         :items="countryData" :fields="tblFields"
-        :sort-by="TotalConfirmed" small
+        :sort-by="TotalConfirmed" :filter="countryName"
         :per-page="perPage" :current-page="currentPage"
         ></b-table>
         <b-pagination
@@ -11,7 +13,6 @@
         v-model="currentPage"
         :total-rows="rows" :per-page="perPage"
         aria-controls="my-table"
-        label-sort-asc=""
         ></b-pagination>
     </div>
 </template>
@@ -35,7 +36,8 @@ export default{
             currentPage: 1,
             perPage: 10,
             pages: 0,
-            rows: 0
+            rows: 0,
+            countryName: ""
         }
     },
     methods:{

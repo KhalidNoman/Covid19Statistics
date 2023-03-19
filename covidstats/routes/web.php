@@ -19,6 +19,6 @@ Route::get('/', function () {
 });
 
 Route::get('/{any}', function () {
-    return view('layouts.vue');
+    return view('welcome');
 })->where('any', '.*');
 
