@@ -19,6 +19,7 @@
         "bootstrap-vue-3": "^0.5.1",
         "vue": "^3.2.47",
         "vue-cli": "^2.9.6",
+        "vue-router": "^4.1.6",
         "world-map-vue": "^0.2.1"
     }
 }

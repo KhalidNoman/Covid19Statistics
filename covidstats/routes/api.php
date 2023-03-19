@@ -21,3 +21,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/fill_data', [CountryController::class, 'fill_data']);
+Route::get('get_global_data', [CountryController::class, 'get_global_data']);
+Route::get('get_country_data', [CountryController::class, 'get_country_data']);

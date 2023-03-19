@@ -18,5 +18,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('get_global_data', [CountryController::class, 'get_global_data']);
-Route::get('get_country_data', [CountryController::class, 'get_country_data']);
+Route::get('/{any}', function () {
+    return view('layouts.vue');
+})->where('any', '.*');
+

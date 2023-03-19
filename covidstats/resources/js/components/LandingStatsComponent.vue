@@ -1,5 +1,5 @@
 <template>
-    <div v-if="globalData">
+    <div>
         <h3>Data update date: {{ retDate }}</h3>
         <h3 style="color: red">Confirmed: {{ totCon }} </h3>
         <h3 style="color: green">Recovered: {{ totRec }}</h3>
@@ -24,7 +24,7 @@ import axios from 'axios';
   },
         methods:{
             async getData(){
-                axios.get('get_global_data').then((res) => {
+                axios.get('api/get_global_data').then((res) => {
                     this.globalData = res.data[0];
                     this.totCon = res.data[0].TotalConfirmed.toLocaleString();
                     this.totRec = res.data[0].TotalRecovered.toLocaleString();
@@ -34,7 +34,7 @@ import axios from 'axios';
                 }).catch()
             }
         },
-        created(){
+        mounted(){
             this.getData()
         }
     };

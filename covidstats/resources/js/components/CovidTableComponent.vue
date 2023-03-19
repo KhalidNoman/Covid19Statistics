@@ -1,9 +1,18 @@
 <template>
     <div>
-        <b-table striped bordered
+        <b-table striped bordered responsive
+        id="covidTable"
         :items="countryData" :fields="tblFields"
-        :sort-by="TotalConfirmed"
+        :sort-by="TotalConfirmed" small
+        :per-page="perPage" :current-page="currentPage"
         ></b-table>
+        <b-pagination
+        style="justify-content: center;"
+        v-model="currentPage"
+        :total-rows="rows" :per-page="perPage"
+        aria-controls="my-table"
+        label-sort-asc=""
+        ></b-pagination>
     </div>
 </template>
 
@@ -15,20 +24,27 @@ export default{
         return {
             countryData: [],
             tblFields: [
-                {key:'Country'},
+                {key:'Country', stickyColumn:true},
                 {key:'TotalConfirmed', sortable:true},
-                'TotalRecovered',
-                'TotalDeaths',
-                'NewConfirmed',
-                'NewRecovered',
-                'NewDeaths'
-            ]
+                {key:'TotalRecovered', sortable:true},
+                {key:'TotalDeaths', sortable:true},
+                {key:'NewConfirmed', sortable:true},
+                {key:'NewRecovered', sortable:true},
+                {key:'NewDeaths', sortable:true}
+            ],
+            currentPage: 1,
+            perPage: 10,
+            pages: 0,
+            rows: 0
         }
     },
     methods:{
             async getData(){
-                axios.get('get_country_data').then((res) => {
+                axios.get('api/get_country_data').then((res) => {
                     this.countryData = res.data;
+                    this.rows = this.countryData.length;
+                    this.pages = Math.round(this.rows/10)
+                    this.currentPage = window.location.pathname.length > 1? window.location.pathname.trimStart(1):1
                 }).catch()
             }
         },
