@@ -1,8 +1,8 @@
 <template>
   <div>
-    <b-nav tabs>
-    <b-nav-item to="/">Home</b-nav-item>
-    <b-nav-item to="/country-list">Wordl</b-nav-item>
+    <b-nav tabs style="margin-bottom: 30px">
+    <b-nav-item to="/" exact-active-class="active">World Stats</b-nav-item>
+    <b-nav-item to="/country-list" exact-active-class="active">Country Stats</b-nav-item>
 
   </b-nav>
   <router-view></router-view>

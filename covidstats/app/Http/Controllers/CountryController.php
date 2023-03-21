@@ -18,9 +18,9 @@ class CountryController extends Controller
         $data = json_decode($response->getBody()->getContents(),true);
 
         //Fill out Country Data
-        Country::truncate();
+        // Country::truncate();
         foreach($data['Countries'] as $temp){
-            Country::create([
+            Country::updateOrCreate([
                 'Country'=> strval($temp['Country']),
                 'CountryCode'=> strval($temp['CountryCode']),
                 'Date'=> strval($temp['Date']),
@@ -56,5 +56,27 @@ class CountryController extends Controller
     }
     public function get_country_data(){
         return Country::all();
+    }
+
+    public function update_country(){
+        
+    }
+
+    public function add_country(Request $data){
+        $temp = Country::create([
+            'Country'=> strval($data['Country']),
+            'CountryCode'=> strval($data['CountryCode']),
+            'Date'=> strval($data['Date']),
+            'id'=> strval($data['id']),
+            'NewConfirmed'=> strval($data['NewConfirmed']),
+            'NewDeaths'=> strval($data['NewDeaths']),
+            'NewRecovered'=> strval($data['NewRecovered']),
+            'Slug'=> strval($data['Slug']),
+            'TotalConfirmed'=> strval($data['TotalConfirmed']),
+            'TotalDeaths'=> strval($data['TotalDeaths']),
+            'TotalRecovered'=> strval($data['TotalRecovered']),
+        ]);
+
+
     }
 }
