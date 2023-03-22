@@ -17,8 +17,10 @@
         "bootstrap": "^5.2.3",
         "bootstrap-vue": "^2.23.1",
         "bootstrap-vue-3": "^0.5.1",
+        "chroma-js": "^2.4.2",
         "vue": "^3.2.47",
         "vue-cli": "^2.9.6",
+        "vue-map-chart": "^0.0.2",
         "vue-router": "^4.1.6",
         "world-map-vue": "^0.2.1"
     }

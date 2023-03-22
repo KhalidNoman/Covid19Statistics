@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 class Country extends Model
 {
     public $timestamps = false;
+    public $keyType = 'string';
 
     protected $table = 'country';
     protected $fillable = [

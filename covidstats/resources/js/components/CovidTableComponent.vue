@@ -31,14 +31,14 @@
 
                 <b-button class="margins" type="submit" variant="primary">Submit</b-button>
                 <b-button class="margins" type="reset" variant="danger">Reset </b-button>
-
+                <b-button style="float:right" class="margins" variant="danger" @click="deleteRow">Delete </b-button>
         </b-form>
 
 
         <b-form-input v-model="countryName"
         placeholder="Search by country name"></b-form-input>
         <b-table striped bordered responsive hover
-        id="covidTable"
+        id="covidTable" ref="covidTable"
         :items="countryData" :fields="tblFields"
         :sort-by="TotalConfirmed" :filter="countryName"
         :per-page="perPage" :current-page="currentPage"
@@ -107,7 +107,17 @@ export default{
             onSubmit(event){
                 event.preventDefault();
                 if(this.selectedRow >= 0){
-
+                    let temp = this.countryData[this.selectedRow]
+                    temp.TotalConfirmed = this.form.tCon
+                    temp.TotalRecovered = this.form.tRec
+                    temp.TotalDeaths = this.form.tDts
+                    temp.NewConfirmed = this.form.nCon
+                    temp.NewRecovered = this.form.nRec
+                    temp.NewDeaths = this.form.nDts
+                    axios.post('api/update_country', temp, temp.id)
+                    alert("Country updated")
+                    this.getData()
+                    this.clearData()
                 }
                 else if(this.codes.includes(this.form.code.toLowerCase()) )
                     alert("Country code already exists")
@@ -130,6 +140,7 @@ export default{
                     axios.post('api/add_country', temp)
                     alert("Country added")
                     this.getData()
+                    this.clearData()
                 }
             },
             rowClick(item, index, event){
@@ -142,12 +153,33 @@ export default{
                 this.form.nRec = item.NewRecovered
                 this.form.nDts = item.NewDeaths
                 this.disableIns = true
-                this.selectedRow = index
+                this.selectedRow = (this.currentPage-1)*10 + index
             },
             onReset(event){
                 this.disableIns = false
                 this.selectedRow = -1
+                this.clearData()
             },
+            deleteRow(event){
+                let confirmation = window.confirm("Please confirm you would like to delete " + this.countryData[this.selectedRow].Country)
+                if(confirmation){
+                    axios.post('api/delete_country', this.countryData[this.selectedRow])
+                    this.getData()
+                    this.clearData()
+                }
+            },
+            clearData(){
+                this.form.country = ""
+                this.form.code = ""
+                this.form.tCon = 0
+                this.form.tRec = 0
+                this.form.tDts = 0
+                this.form.nCon = 0
+                this.form.nRec = 0
+                this.form.nDts = 0
+                this.selectedRow = -1
+                this.disableIns = false
+            }
         },
 
         created(){

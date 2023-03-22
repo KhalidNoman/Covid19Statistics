@@ -20,20 +20,34 @@ class CountryController extends Controller
         //Fill out Country Data
         // Country::truncate();
         foreach($data['Countries'] as $temp){
-            Country::updateOrCreate([
-                'Country'=> strval($temp['Country']),
-                'CountryCode'=> strval($temp['CountryCode']),
-                'Date'=> strval($temp['Date']),
-                'id'=> strval($temp['ID']),
-                'NewConfirmed'=> strval($temp['NewConfirmed']),
-                'NewDeaths'=> strval($temp['NewDeaths']),
-                'NewRecovered'=> strval($temp['NewRecovered']),
-                'Slug'=> strval($temp['Slug']),
-                'TotalConfirmed'=> strval($temp['TotalConfirmed']),
-                'TotalDeaths'=> strval($temp['TotalDeaths']),
-                'TotalRecovered'=> strval($temp['TotalRecovered']),
+            $check = Country::find($temp['ID']);
+            if($check){
+                $check->update([
+                    'Date'=> strval($temp['Date']),
+                    'NewConfirmed'=> strval($temp['NewConfirmed']),
+                    'NewDeaths'=> strval($temp['NewDeaths']),
+                    'NewRecovered'=> strval($temp['NewRecovered']),
+                    'TotalConfirmed'=> strval($temp['TotalConfirmed']),
+                    'TotalDeaths'=> strval($temp['TotalDeaths']),
+                    'TotalRecovered'=> strval($temp['TotalRecovered']),
+                ]);
+            }else {
+                Country::create([
+                    'Country'=> strval($temp['Country']),
+                    'CountryCode'=> strval($temp['CountryCode']),
+                    'Date'=> strval($temp['Date']),
+                    'id'=> strval($temp['ID']),
+                    'NewConfirmed'=> strval($temp['NewConfirmed']),
+                    'NewDeaths'=> strval($temp['NewDeaths']),
+                    'NewRecovered'=> strval($temp['NewRecovered']),
+                    'Slug'=> strval($temp['Slug']),
+                    'TotalConfirmed'=> strval($temp['TotalConfirmed']),
+                    'TotalDeaths'=> strval($temp['TotalDeaths']),
+                    'TotalRecovered'=> strval($temp['TotalRecovered']),
 
-            ]);
+                ]);
+            }
+
         };
 
         GlobalData::truncate();
@@ -58,8 +72,19 @@ class CountryController extends Controller
         return Country::all();
     }
 
-    public function update_country(){
-        
+    public function update_country(Request $data,){
+        $temp = Country::find($data['id']);
+        $temp->update([
+            'Date'=> strval($data['Date']),
+            'NewConfirmed'=> strval($data['NewConfirmed']),
+            'NewDeaths'=> strval($data['NewDeaths']),
+            'NewRecovered'=> strval($data['NewRecovered']),
+            'TotalConfirmed'=> strval($data['TotalConfirmed']),
+            'TotalDeaths'=> strval($data['TotalDeaths']),
+            'TotalRecovered'=> strval($data['TotalRecovered']),
+        ]);
+        return $temp;
+
     }
 
     public function add_country(Request $data){
@@ -76,7 +101,13 @@ class CountryController extends Controller
             'TotalDeaths'=> strval($data['TotalDeaths']),
             'TotalRecovered'=> strval($data['TotalRecovered']),
         ]);
+        return $temp;
 
+    }
 
+    public function delete_country(Request $data){
+        // Country::where('id',$data)->delete();
+        Country::destroy($data['id']);
+        return $data;
     }
 }
