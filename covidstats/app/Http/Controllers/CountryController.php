@@ -11,59 +11,76 @@ class CountryController extends Controller
 {
     public function fill_data(Request $request)
     {
-        // Setup api call to get data from covid summary data api
-        $client = new Client();
-        $response = $client->request('GET', 'https://api.covid19api.com/summary', ['verify' => false]);
-        $data = json_decode($response->getBody()->getContents(),true);
+        try{
+            // Setup api call to get data from covid summary data api
+            $client = new Client();
+            $response = $client->request('GET', 'https://api.covid19api.com/summary', ['verify' => false]);
+            $data = json_decode($response->getBody()->getContents(),true);
 
-        //Fill out Country Data
-        foreach($data['Countries'] as $temp){
-            // Check to see if country exists in the database
-            $check = Country::find($temp['ID']);
-            // If it exists update its information
+            //Fill out Country Data
+            foreach($data['Countries'] as $temp){
+                // Check to see if country exists in the database
+                $check = Country::find($temp['ID']);
+                // If it exists update its information
+                if($check){
+                    $check->update([
+                        'Date'=> strval($temp['Date']),
+                        'NewConfirmed'=> strval($temp['NewConfirmed']),
+                        'NewDeaths'=> strval($temp['NewDeaths']),
+                        'NewRecovered'=> strval($temp['NewRecovered']),
+                        'TotalConfirmed'=> strval($temp['TotalConfirmed']),
+                        'TotalDeaths'=> strval($temp['TotalDeaths']),
+                        'TotalRecovered'=> strval($temp['TotalRecovered']),
+                    ]);
+                }
+                // If it does not exist create a new entry
+                else {
+                    Country::create([
+                        'Country'=> strval($temp['Country']),
+                        'CountryCode'=> strval($temp['CountryCode']),
+                        'Date'=> strval($temp['Date']),
+                        'id'=> strval($temp['ID']),
+                        'NewConfirmed'=> strval($temp['NewConfirmed']),
+                        'NewDeaths'=> strval($temp['NewDeaths']),
+                        'NewRecovered'=> strval($temp['NewRecovered']),
+                        'Slug'=> strval($temp['Slug']),
+                        'TotalConfirmed'=> strval($temp['TotalConfirmed']),
+                        'TotalDeaths'=> strval($temp['TotalDeaths']),
+                        'TotalRecovered'=> strval($temp['TotalRecovered']),
+
+                    ]);
+                }
+
+            };
+            // Create new entry for global data
+            $temp = $data['Global'];
+            $check = GlobalData::where('Date',$temp['Date']);
             if($check){
                 $check->update([
-                    'Date'=> strval($temp['Date']),
-                    'NewConfirmed'=> strval($temp['NewConfirmed']),
-                    'NewDeaths'=> strval($temp['NewDeaths']),
-                    'NewRecovered'=> strval($temp['NewRecovered']),
-                    'TotalConfirmed'=> strval($temp['TotalConfirmed']),
-                    'TotalDeaths'=> strval($temp['TotalDeaths']),
-                    'TotalRecovered'=> strval($temp['TotalRecovered']),
+                    'NewConfirmed'=>$temp['NewConfirmed'],
+                    'NewDeaths'=>$temp['NewDeaths'],
+                    'NewRecovered'=>$temp['NewRecovered'],
+                    'TotalConfirmed'=>$temp['TotalConfirmed'],
+                    'TotalDeaths'=>$temp['TotalDeaths'],
+                    'TotalRecovered'=>$temp['TotalRecovered'],
                 ]);
-            }
-            // If it does not exist create a new entry
-            else {
-                Country::create([
-                    'Country'=> strval($temp['Country']),
-                    'CountryCode'=> strval($temp['CountryCode']),
-                    'Date'=> strval($temp['Date']),
-                    'id'=> strval($temp['ID']),
-                    'NewConfirmed'=> strval($temp['NewConfirmed']),
-                    'NewDeaths'=> strval($temp['NewDeaths']),
-                    'NewRecovered'=> strval($temp['NewRecovered']),
-                    'Slug'=> strval($temp['Slug']),
-                    'TotalConfirmed'=> strval($temp['TotalConfirmed']),
-                    'TotalDeaths'=> strval($temp['TotalDeaths']),
-                    'TotalRecovered'=> strval($temp['TotalRecovered']),
-
+            } else {
+                GlobalData::create([
+                    'Date'=>$temp['Date'],
+                    'NewConfirmed'=>$temp['NewConfirmed'],
+                    'NewDeaths'=>$temp['NewDeaths'],
+                    'NewRecovered'=>$temp['NewRecovered'],
+                    'TotalConfirmed'=>$temp['TotalConfirmed'],
+                    'TotalDeaths'=>$temp['TotalDeaths'],
+                    'TotalRecovered'=>$temp['TotalRecovered'],
                 ]);
             }
 
-        };
-        // Create new entry for global data
-        $temp = $data['Global'];
-        GlobalData::create([
-            'Date'=>$temp['Date'],
-            'NewConfirmed'=>$temp['NewConfirmed'],
-            'NewDeaths'=>$temp['NewDeaths'],
-            'NewRecovered'=>$temp['NewRecovered'],
-            'TotalConfirmed'=>$temp['TotalConfirmed'],
-            'TotalDeaths'=>$temp['TotalDeaths'],
-            'TotalRecovered'=>$temp['TotalRecovered'],
-        ]);
+            return response() -> json(['Message' => 'Databases updated successfully!'], 200);
+        }catch(error){
+            return response() -> json(['Failed' => 'Api is down'], 500);
+        }
 
-        return response() -> json(['message' => 'Databases updated successfully!'], 200);
     }
 
     public function get_global_data(){
@@ -87,7 +104,7 @@ class CountryController extends Controller
             'TotalDeaths'=> strval($data['TotalDeaths']),
             'TotalRecovered'=> strval($data['TotalRecovered']),
         ]);
-        return $temp;
+        return response() -> json(['country:' => $temp], 200);
 
     }
 
@@ -106,13 +123,13 @@ class CountryController extends Controller
             'TotalDeaths'=> strval($data['TotalDeaths']),
             'TotalRecovered'=> strval($data['TotalRecovered']),
         ]);
-        return $temp;
-
+        return response() -> json(['country:' => $temp], 200);
     }
 
     public function delete_country(Request $data){
         // Find a country using its id and delete it
+        $temp = $data;
         Country::destroy($data['id']);
-        return $data;
+        return response() -> json(['country:' => $temp], 200);
     }
 }
