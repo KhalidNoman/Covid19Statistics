@@ -2,6 +2,7 @@
     <div class="margins">
         <h1>Edit a country's data by clicking on its row and country or add a new country</h1>
         <b-form @submit="onSubmit" @reset="onReset" >
+            <!-- Form to edit and add a country into the database -->
             <div class="form-group">
                 <legend>Country:
                 <b-form-input class="form-margin" v-model="form.country" type="text" :disabled="disableIns"></b-form-input>
@@ -28,15 +29,16 @@
                 <b-form-input class="form-margin" v-model="form.tDts" type="number" min="0"></b-form-input>
                 </legend>
             </div>
-
                 <b-button class="margins" type="submit" variant="primary">Submit</b-button>
                 <b-button class="margins" type="reset" variant="danger">Reset </b-button>
                 <b-button style="float:right" class="margins" variant="danger" @click="deleteRow">Delete </b-button>
         </b-form>
 
 
+        <!-- Search bar to filter table based on input -->
         <b-form-input v-model="countryName"
         placeholder="Search by country name"></b-form-input>
+        <!-- Bootstrap table to display country data -->
         <b-table striped bordered responsive hover
         id="covidTable" ref="covidTable"
         :items="countryData" :fields="tblFields"
@@ -44,6 +46,7 @@
         :per-page="perPage" :current-page="currentPage"
         @row-clicked="rowClick" selectable
         ></b-table>
+        <!-- Paginate table for clearer visibility -->
         <b-pagination
         style="justify-content: center;"
         v-model="currentPage"
@@ -93,6 +96,7 @@ export default{
     },
     methods:{
             async getData(){
+                // Get country data through api call to database
                 axios.get('api/get_country_data').then((res) => {
                     this.countryData = res.data;
                     this.rows = this.countryData.length;
@@ -107,6 +111,9 @@ export default{
             onSubmit(event){
                 event.preventDefault();
                 if(this.selectedRow >= 0){
+                    // Edit a country (selected row means a country is selected from  the table)
+                    // Selected row variable is always reset to -1 if no country is selected
+                    // or if form is reset
                     let temp = this.countryData[this.selectedRow]
                     temp.TotalConfirmed = this.form.tCon
                     temp.TotalRecovered = this.form.tRec
@@ -120,10 +127,14 @@ export default{
                     this.clearData()
                 }
                 else if(this.codes.includes(this.form.code.toLowerCase()) )
+                    // Cannot add a country with an already existing country code
                     alert("Country code already exists")
                 else if(this.countries.includes(this.form.country.toLowerCase()))
+                    // Cannot add a country with an already existing country name
                     alert("Country already exists")
                 else{
+                    // Country name an country code are unique in the database
+                    // Grab the data from the form
                     let temp = {
                         Country: this.form.country,
                         CountryCode: this.form.code,
@@ -137,13 +148,20 @@ export default{
                         Date: new Date(),
                         Slug: String(this.form.country).replace(/\s+/g, '-').toLowerCase()
                     }
+                    // Slug will be created through taking a country's name making it lower case
+                    // and splitting words using dashed instead of spaces
+
+                    // Id is set by using the countrty name and the date it was added to keep
+                    // ids unique
                     axios.post('api/add_country', temp)
                     alert("Country added")
+                    // Reset table to show updated data
                     this.getData()
                     this.clearData()
                 }
             },
             rowClick(item, index, event){
+                // Set form fields to selected country's data
                 this.form.country = item.Country
                 this.form.code = item.CountryCode
                 this.form.tCon = item.TotalConfirmed
@@ -153,14 +171,18 @@ export default{
                 this.form.nRec = item.NewRecovered
                 this.form.nDts = item.NewDeaths
                 this.disableIns = true
-                this.selectedRow = (this.currentPage-1)*10 + index
+                // Get the index of the country taking into account table might be sorted
+                this.selectedRow = this.countries.indexOf(String(item.Country).toLowerCase())
             },
             onReset(event){
+                // On reset click change back to add country mode
                 this.disableIns = false
                 this.selectedRow = -1
+                // Clear data in the form fields
                 this.clearData()
             },
             deleteRow(event){
+                // Confirm with user on clicking delete button
                 let confirmation = window.confirm("Please confirm you would like to delete " + this.countryData[this.selectedRow].Country)
                 if(confirmation){
                     axios.post('api/delete_country', this.countryData[this.selectedRow])
@@ -169,6 +191,7 @@ export default{
                 }
             },
             clearData(){
+                // Reset the field values in the form
                 this.form.country = ""
                 this.form.code = ""
                 this.form.tCon = 0
@@ -177,6 +200,7 @@ export default{
                 this.form.nCon = 0
                 this.form.nRec = 0
                 this.form.nDts = 0
+                // Go back to add country mode
                 this.selectedRow = -1
                 this.disableIns = false
             }

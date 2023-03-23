@@ -1,14 +1,15 @@
 <template>
     <div>
-        <h1>Covid 19 Statistics </h1>
         <div style="columns:2">
             <div>
+                <!-- Summary of world covid stats -->
                 <h3>Data update date: {{ retDate }}</h3>
                 <h3 style="color: red">Confirmed: {{ totCon }} </h3>
                 <h3 style="color: green">Recovered: {{ totRec }}</h3>
                 <h3 style="color: black">Deaths: {{ totDea }}</h3>
             </div>
             <div>
+                <!-- Radio button group to select type of data to display on map -->
                 <legend>Type of data to show on the map:</legend>
                 <b-form-radio-group @change="radioChange" style="columns:2" v-model="selected">
                     <b-form-radio size="lg" value="1">Total Confirmed</b-form-radio>
@@ -21,7 +22,8 @@
             </div>
         </div>
 
-        <MapChart :country-data="tConfirmedData" v-if="selected == 1" defaultCountryFillColor="#FFFFFF"
+        <!-- Display the map according to the selected radio button -->
+        <MapChart :country-data="tConfirmedData" v-if="selected == 1"
         ></MapChart>
         <MapChart :country-data="tRecoveredData" v-if="selected == 2"
         ></MapChart>
@@ -38,6 +40,12 @@
 
 <script>
 import axios from 'axios';
+// Import map building library
+// File App.vue in vue-map-chart was edited on lines
+// -> 19 to comment out chroma-js import as it is no longer supported
+// -> 20 to change "import Map from './Map'" to "import Map from './Map.vue'"
+// -> 73-75 to comment out use of chroma-js
+// -> 95-100 to comment out use of chroma-js
 import MapChart from 'vue-map-chart'
 
 export default{
@@ -63,6 +71,7 @@ export default{
     },
         methods:{
             async getData(){
+                // Get global data from database through an api
                 axios.get('api/get_global_data').then((res) => {
                     this.globalData = res.data[0];
                     this.totCon = res.data[0].TotalConfirmed.toLocaleString();
@@ -70,8 +79,12 @@ export default{
                     this.totDea = res.data[0].TotalDeaths.toLocaleString();
                     this.retDate = new Date(res.data[0].Date).toLocaleString();
                 }).catch()
+                // Get country data from database through an api
                 axios.get('api/get_country_data').then((res) => {
                     this.countryData = res.data;
+                    // Create seperate objects for each data type to display on map
+                    // Map uses country-data which requires the data to be in the form
+                    // of { 'CountryCode': value }
                     let totCon = new Object();
                     let totRec = new Object();
                     let totDts = new Object();
@@ -96,6 +109,7 @@ export default{
             }
         },
     mounted(){
+            // Initialize variables
             this.getData()
     }
 };

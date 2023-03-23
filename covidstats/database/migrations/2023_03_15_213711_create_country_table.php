@@ -11,6 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Table schema for country table
+        // This table will hold data on individual countries
+        // The primary key will be the id field
         Schema::create('country', function (Blueprint $table) {
             $table->string('Country');
             $table->string('CountryCode');

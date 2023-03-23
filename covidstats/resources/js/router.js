@@ -1,13 +1,12 @@
 import Vue from 'vue';
 import * as VueRouter from 'vue-router';
 
-import CovidMapComponent from './components/CovidMapComponent.vue';
 import LandingStatsComponent from './components/LandingStatsComponent.vue'
 import CovidTableComponent from './components/CovidTableComponent.vue'
-import HomePageComponent from './components/HomePageComponent.vue'
 
 Vue.use(VueRouter);
 
+//Create router variable that holds paths for NavBar to function
 const router = VueRouter.createRouter({
     history: VueRouter.createWebHashHistory(),
     routes:[

@@ -11,16 +11,16 @@ class CountryController extends Controller
 {
     public function fill_data(Request $request)
     {
-
+        // Setup api call to get data from covid summary data api
         $client = new Client();
         $response = $client->request('GET', 'https://api.covid19api.com/summary', ['verify' => false]);
-        // $response = $client -> request('GET', 'https://api.covid19api.com/summary');
         $data = json_decode($response->getBody()->getContents(),true);
 
         //Fill out Country Data
-        // Country::truncate();
         foreach($data['Countries'] as $temp){
+            // Check to see if country exists in the database
             $check = Country::find($temp['ID']);
+            // If it exists update its information
             if($check){
                 $check->update([
                     'Date'=> strval($temp['Date']),
@@ -31,7 +31,9 @@ class CountryController extends Controller
                     'TotalDeaths'=> strval($temp['TotalDeaths']),
                     'TotalRecovered'=> strval($temp['TotalRecovered']),
                 ]);
-            }else {
+            }
+            // If it does not exist create a new entry
+            else {
                 Country::create([
                     'Country'=> strval($temp['Country']),
                     'CountryCode'=> strval($temp['CountryCode']),
@@ -49,8 +51,7 @@ class CountryController extends Controller
             }
 
         };
-
-        GlobalData::truncate();
+        // Create new entry for global data
         $temp = $data['Global'];
         GlobalData::create([
             'Date'=>$temp['Date'],
@@ -66,13 +67,16 @@ class CountryController extends Controller
     }
 
     public function get_global_data(){
+        // Return all global data
         return GlobalData::all();
     }
     public function get_country_data(){
+        // Return all country data
         return Country::all();
     }
 
     public function update_country(Request $data,){
+        // Update a country by searching using its id (the primary key)
         $temp = Country::find($data['id']);
         $temp->update([
             'Date'=> strval($data['Date']),
@@ -88,6 +92,7 @@ class CountryController extends Controller
     }
 
     public function add_country(Request $data){
+        // Create a country entry
         $temp = Country::create([
             'Country'=> strval($data['Country']),
             'CountryCode'=> strval($data['CountryCode']),
@@ -106,7 +111,7 @@ class CountryController extends Controller
     }
 
     public function delete_country(Request $data){
-        // Country::where('id',$data)->delete();
+        // Find a country using its id and delete it
         Country::destroy($data['id']);
         return $data;
     }

@@ -11,6 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Table schema for global data
+        // This table will hold data on global covid stats
+        // Primary key will be date last updated
         Schema::create('globalData', function (Blueprint $table) {
             $table->timestamp('Date') -> primary();
             $table->decimal('NewConfirmed');
