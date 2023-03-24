@@ -55,7 +55,7 @@ class CountryController extends Controller
             // Create new entry for global data
             $temp = $data['Global'];
             $check = GlobalData::where('Date',$temp['Date']);
-            if($check){
+            if($check -> count()){
                 $check->update([
                     'NewConfirmed'=>$temp['NewConfirmed'],
                     'NewDeaths'=>$temp['NewDeaths'],
