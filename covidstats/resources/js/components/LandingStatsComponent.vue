@@ -40,13 +40,22 @@
 
 <script>
 import axios from 'axios';
+
+/******************************************************************************/
 // Import map building library
 // File App.vue in vue-map-chart was edited on lines
 // -> 19 to comment out chroma-js import as it is no longer supported
 // -> 20 to change "import Map from './Map'" to "import Map from './Map.vue'"
 // -> 73-75 to comment out use of chroma-js
 // -> 95-100 to comment out use of chroma-js
-import MapChart from 'vue-map-chart'
+// import MapChart from 'vue-map-chart'
+/******************************************************************************/
+
+// Required files from map-vue-chart libray have been extracted
+// and edited to fit this project's needs
+// This method is better than editing the libray in the node_modules folder
+// as it does not require the edits to be made everytime it is cloned
+import MapChart from '../vue-map-chart/App.vue'
 
 export default{
     components:{

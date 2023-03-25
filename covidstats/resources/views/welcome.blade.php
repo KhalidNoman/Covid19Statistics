@@ -10,5 +10,8 @@
         <div id="app">
             <home-page></home-page>
         </div>
+        <footer>
+            <p>Done by: Khalid Noman | Email: <a href="mailto:ksnoman@live.com">ksnoman@live.com</a></p>
+        </footer>
     </body>
 </html>

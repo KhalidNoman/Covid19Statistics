@@ -17,7 +17,7 @@ class CountryController extends Controller
             $response = $client->request('GET', 'https://api.covid19api.com/summary', ['verify' => false]);
             $data = json_decode($response->getBody()->getContents(),true);
             if(strval($data['Message']) == 'Caching in progress')
-                return response() -> json(['Failed' => $data['Message']], 500);
+                return response() -> json(['Failed API response' => $data['Message']], 500);
 
             //Fill out Country Data
             foreach($data['Countries'] as $temp){
