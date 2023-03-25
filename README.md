@@ -1,7 +1,7 @@
 # Covid19Statistics
 An application developed in VueJS to display some statistics about covid 19
 
-The preferred method of is running the application througha Visual Studio Code IDE
+The preferred method of is running the application through a Visual Studio Code IDE
 To run the project in Visual Studio Code do the following
   1) Clone the repository through the IDE
   2) Open the built in IDE terminal and cd to the covidstats folder
